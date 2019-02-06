@@ -6,7 +6,7 @@
 struct doorLocation {
 	doorLocation(int x, int y) :
 		mX(x),
-		mY(y) {}
+		mY(y){}
 
 	int mX;
 	int mY;
