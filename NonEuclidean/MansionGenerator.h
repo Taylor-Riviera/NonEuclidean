@@ -53,6 +53,8 @@ private:
 	void _addTileToPath(Path& path, Tile& tile);
 	std::vector<Tile> _vaildTilesFromPoint(int x, int y);
 	Tile& _getTileAt(int x, int y);
+	Point _getPointFromIndex(int index);
+	int _getTileIndex(int x, int y);
 	int _getDirection(const Tile& start, const Tile& end);
 	std::vector<RoomData> mRooms;
 	std::vector<Tile> mLayoutData;

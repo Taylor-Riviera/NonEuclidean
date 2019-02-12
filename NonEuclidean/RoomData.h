@@ -28,4 +28,5 @@ public:
 	int mX;
 	int mY;
 	std::vector<doorLocation> mDoors;
+	doorLocation getDoorLocation(int i);
 };

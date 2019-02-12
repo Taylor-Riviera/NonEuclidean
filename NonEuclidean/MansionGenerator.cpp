@@ -36,7 +36,6 @@ void MansionGenerator::generateNewMansion() {
 	writeMansionToConsole();
 }
 
-TO DO MAKE THIS WORK WITH ABSOLUTE DOOR LOCATIONS
 void MansionGenerator::_createPath(int pathId, doorLocation doorIdStart, doorLocation doorIdGoal) {
 	//Path is a vector of points
 	//Starting at a door
@@ -52,7 +51,7 @@ void MansionGenerator::_createPath(int pathId, doorLocation doorIdStart, doorLoc
 	while (currentTile.x != goalXLoc && currentTile.y != goalYLoc) {
 		//Find a list of valid tiles to go to
 		auto tilesList = _vaildTilesFromPoint(currentTile.x, currentTile.y);
-		_ASSERT(tilesList.size() == 0);
+		_ASSERT(tilesList.size() != 0);
 		if (tilesList.size() == 1) {
 			//That's the direction you're going in
 			_addTileToPath(path, tilesList[0]);
@@ -68,13 +67,16 @@ void MansionGenerator::_createPath(int pathId, doorLocation doorIdStart, doorLoc
 		}
 		
 		std::sort(distanceVector.begin(), distanceVector.end(), [](std::pair<float, int>& rhs, std::pair<float, int>& lhs) {
-			return rhs.first > lhs.first;
+			return rhs.first < lhs.first;
 		});
 
 		_addTileToPath(path, tilesList[distanceVector[0].second]);
 		lastDir = _getDirection(currentTile, tilesList[distanceVector[0].second]);
 		currentTile = tilesList[distanceVector[0].second];
 		
+		std::cout << std::endl;
+		_writePathToLayout(path);
+		writeMansionToConsole();
 	}
 	
 	_writePathToLayout(path);
@@ -105,9 +107,13 @@ std::vector<Tile> MansionGenerator::_vaildTilesFromPoint(int x, int y) {
 	if (y < MANSION_HEIGHT - 1) {
 		output.push_back(_getTileAt(x, y + 1));
 	}
-	std::remove_if(output.begin(), output.end(), [](Tile& t) {
-		return t.roomId == -1 && t.doorId == -1; 
-	});
+	output.erase(
+		std::remove_if(
+			output.begin(), 
+			output.end(), 
+			[](Tile& t) {
+		return t.roomId != -1; 
+	}), output.end());
 	return output;
 }
 
@@ -117,11 +123,15 @@ float MansionGenerator::_aStarHuristic(int x1, int y1, int x2, int y2) {
 
 void MansionGenerator::_writePathToLayout(Path path) {
 	for (auto&& t : path.mPoints) {
-		_getTileAt(t.mX, t.mY).pathId = path.mPathId;
+		mLayoutData[_getTileIndex(t.mX, t.mY)].pathId = path.mPathId;
 	}
 }
 
 void MansionGenerator::_addTileToPath(Path& path, Tile& tile) {
+	if (path.mPoints.size() == 0) {
+		path.mPoints.push_back(Point(tile.x, tile.y));
+		return;
+	}
 	auto back = path.mPoints[path.mPoints.size() - 1];
 	if (tile.doorId != -1) {
 		path.mConnectedDoors.push_back(tile.doorId);
@@ -132,7 +142,7 @@ void MansionGenerator::_addTileToPath(Path& path, Tile& tile) {
 }
 
 void MansionGenerator::reconfigureAllPaths() {
-	_createPath(1, mRooms[0].mDoors[0], mRooms[1].mDoors[0]);
+	_createPath(0, mRooms[0].getDoorLocation(0), mRooms[1].getDoorLocation(0));
 }
 
 void MansionGenerator::registerNewRoom(const RoomData& data) {
@@ -156,7 +166,7 @@ void MansionGenerator::_placeRoomsInMansion() {
 	for(auto&& room : mRooms) {
 		for (int y = 0; y < room.mHeight; ++y) {
 			for (int x = 0; x < room.mWidth; ++x) {
-				Tile& tile = _getTileAt(x + room.mX, MANSION_HEIGHT - (y + room.mY) - 1);
+				Tile& tile = _getTileAt(x + room.mX, y + room.mY);
 				tile.roomId = roomId;
 				for (auto&& door : room.mDoors) {
 					if (x == door.mX && y == door.mY) {
@@ -176,8 +186,21 @@ void MansionGenerator::_init(int width, int height) {
 	mWidth = width;
 	mHeight = height;
 	mLayoutData = std::vector<Tile>(width * height);
+	for (unsigned i = 0; i < mLayoutData.size(); ++i) {
+		Point point = _getPointFromIndex(i);
+		mLayoutData[i].x = point.mX;
+		mLayoutData[i].y = point.mY;
+	}
+}
+
+int MansionGenerator::_getTileIndex(int x, int y) {
+	return (y * mWidth) + x;
+}
+
+Point MansionGenerator::_getPointFromIndex(int index) {
+	return Point( index % mWidth, index / mWidth);
 }
 
 Tile& MansionGenerator::_getTileAt(int x, int y) {
-	return mLayoutData[(y * mWidth) + (mWidth - x - 1)];
+	return mLayoutData[_getTileIndex(x, y)];
 }
