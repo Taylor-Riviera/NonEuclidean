@@ -76,11 +76,7 @@ void MansionGenerator::_createPath(int pathId, doorLocation doorIdStart, doorLoc
 	}
 	
 	_writePathToLayout(path);
-	//if there is a better direction to go in besides straight 
-	//Max of x turns every y tiles
-
-	//Try to move towards the goal
-
+	mPaths.push_back(path);
 }
 
 int MansionGenerator::_getDirection(const Tile& start, const Tile& end) {
@@ -147,6 +143,10 @@ void MansionGenerator::registerNewRoom(const RoomData& data) {
 
 const std::vector<RoomData>& MansionGenerator::getRooms() {
 	return mRooms;
+}
+
+const std::vector<Path>& MansionGenerator::getPaths() {
+	return mPaths;
 }
 
 void MansionGenerator::writeMansionToConsole() {

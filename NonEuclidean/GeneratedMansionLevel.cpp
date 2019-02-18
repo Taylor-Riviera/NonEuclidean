@@ -11,8 +11,9 @@ void GeneratedMansionLevel::Load(PObjectVec& objs, PPortalVec& portals, Player& 
 	mg.generateNewMansion();
 
 	generateRooms(objs, mg);
+	generatePaths(objs, mg);
 
-	player.pos = Vector3(20, GH_PLAYER_HEIGHT + 1, 10);
+	player.pos = Vector3(20, GH_PLAYER_HEIGHT, 10);
 };
 
 void GeneratedMansionLevel::generateRooms(PObjectVec& objs, MansionGenerator& mg) {
@@ -26,7 +27,18 @@ void GeneratedMansionLevel::generateRooms(PObjectVec& objs, MansionGenerator& mg
 			static_cast<float>(room.mY + room.mHeight / 2)));
 		objs.push_back(newRoom);
 	}
-	
-	std::shared_ptr<GeneratedMansionLevel> room(new GeneratedMansionLevel());
+}
 
+void GeneratedMansionLevel::generatePaths(PObjectVec& objs, MansionGenerator& mg) {
+	for each(auto path in mg.getPaths()) {
+		for each(auto tile in path.mPoints) {
+			std::shared_ptr<PlaceholderRoom>
+			newTile((new PlaceholderRoom(static_cast<float>(1), static_cast<float>(1))));
+			newTile->setPos(Vector3(
+				static_cast<float>(tile.mX + .5f),
+				0.f,
+				static_cast<float>(tile.mY + .5f)));
+			objs.push_back(newTile);
+		}
+	}
 }

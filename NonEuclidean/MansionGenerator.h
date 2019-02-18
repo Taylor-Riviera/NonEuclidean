@@ -46,6 +46,7 @@ public:
 	void writeMansionToConsole();
 
 	const std::vector<RoomData>& getRooms();
+	const std::vector<Path>& getPaths();
 private:
 	void _init(int width, int height);
 	void _placeRoomsInMansion();
@@ -59,6 +60,7 @@ private:
 	int _getTileIndex(int x, int y);
 	int _getDirection(const Tile& start, const Tile& end);
 	std::vector<RoomData> mRooms;
+	std::vector<Path> mPaths;
 	std::vector<Tile> mLayoutData;
 	
 	int mHeight;
