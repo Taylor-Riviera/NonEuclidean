@@ -6,6 +6,7 @@
 #include "Level4.h"
 #include "Level5.h"
 #include "Level6.h"
+#include "GeneratedMansionLevel.h"
 #include <GL/wglew.h>
 #include <cmath>
 #include <iostream>
@@ -38,13 +39,14 @@ Engine::Engine() : hWnd(NULL), hDC(NULL), hRC(NULL) {
   player.reset(new Player);
   GH_PLAYER = player.get();
 
-  vScenes.push_back(std::shared_ptr<Scene>(new Level1));
+  vScenes.push_back(std::shared_ptr<Scene>(new GeneratedMansionLevel()));
+  /*vScenes.push_back(std::shared_ptr<Scene>(new Level1));
   vScenes.push_back(std::shared_ptr<Scene>(new Level2(3)));
   vScenes.push_back(std::shared_ptr<Scene>(new Level2(6)));
   vScenes.push_back(std::shared_ptr<Scene>(new Level3));
   vScenes.push_back(std::shared_ptr<Scene>(new Level4));
   vScenes.push_back(std::shared_ptr<Scene>(new Level5));
-  vScenes.push_back(std::shared_ptr<Scene>(new Level6));
+  vScenes.push_back(std::shared_ptr<Scene>(new Level6));*/
 
   LoadScene(0);
 

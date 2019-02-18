@@ -73,10 +73,6 @@ void MansionGenerator::_createPath(int pathId, doorLocation doorIdStart, doorLoc
 		_addTileToPath(path, tilesList[distanceVector[0].second]);
 		lastDir = _getDirection(currentTile, tilesList[distanceVector[0].second]);
 		currentTile = tilesList[distanceVector[0].second];
-		
-		std::cout << std::endl;
-		_writePathToLayout(path);
-		writeMansionToConsole();
 	}
 	
 	_writePathToLayout(path);
@@ -147,6 +143,10 @@ void MansionGenerator::reconfigureAllPaths() {
 
 void MansionGenerator::registerNewRoom(const RoomData& data) {
 	mRooms.push_back(data);
+}
+
+const std::vector<RoomData>& MansionGenerator::getRooms() {
+	return mRooms;
 }
 
 void MansionGenerator::writeMansionToConsole() {

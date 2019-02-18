@@ -93,6 +93,9 @@
     <ClCompile Include="RoomData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedMansionLevel.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -196,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="RoomData.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceholderRoom.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedMansionLevel.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

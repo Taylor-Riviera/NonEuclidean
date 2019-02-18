@@ -44,6 +44,8 @@ public:
 	void reconfigureAllPaths();
 	void registerNewRoom(const RoomData& data);
 	void writeMansionToConsole();
+
+	const std::vector<RoomData>& getRooms();
 private:
 	void _init(int width, int height);
 	void _placeRoomsInMansion();
